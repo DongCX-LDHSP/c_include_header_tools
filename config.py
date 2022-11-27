@@ -35,3 +35,8 @@ log_file_open_mode: str = 'w'
 
 # 查找深度
 search_depth: int = 10
+# 要屏蔽的头文件
+black_headers: set = {
+    'stdio.h',
+    'stdlib.h',
+}
