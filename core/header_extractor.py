@@ -10,7 +10,7 @@ import re
 - #include "include\\foo\\bar.h"
 - #include "foo.hpp"
 """
-header_pattern = r'^#include *["<](\w+([\\/]\w*)*\.[hpp]{1,3})[">]$'
+header_pattern = r'^#include *["<](\w+([\\/]\w*)*\.[chpp]{1,3})[">]$'
 header_extractor = re.compile(header_pattern, re.M)
 
 
