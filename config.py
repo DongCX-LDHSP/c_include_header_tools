@@ -33,7 +33,7 @@ log_file_path: str = os.path.join(BASE_DIR, 'me.log')
 # 日志文件打开默认，默认使用覆盖写模式，即：'w'
 log_file_open_mode: str = 'w'
 
-# 查找深度
+# 查找深度（一个依赖于实现的特性，将深度设置为 小于0 的值，可以不限制递归深度）
 search_depth: int = 10
 # 要屏蔽的头文件
 black_headers: set = {
