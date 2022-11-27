@@ -29,3 +29,6 @@ log_level: str = 'WARNING'
 log_file_path: str = os.path.join(BASE_DIR, 'me.log')
 # 日志文件打开默认，默认使用覆盖写模式，即：'w'
 log_file_open_mode: str = 'w'
+
+# 查找深度
+search_depth: int = 10
