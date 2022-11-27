@@ -15,7 +15,7 @@ searched_headers: Set[str] = set()
 max_search_depth: int = 0
 
 
-def dfs(start_header: str, target_header: str, path_to_header: str, include_paths: List[str], depth: int) -> None:
+def direct_search_dfs(start_header: str, target_header: str, path_to_header: str, include_paths: List[str], depth: int) -> None:
     """
     在一个头文件中递归查找另一个头文件
     :param start_header: 出发头文件
@@ -54,7 +54,7 @@ def dfs(start_header: str, target_header: str, path_to_header: str, include_path
             # 跳过已查找过的头文件
             if header in searched_headers:
                 continue
-            dfs(header, target_header, f'{path_to_header} -> {header}', include_paths, depth - 1)
+            direct_search_dfs(header, target_header, f'{path_to_header} -> {header}', include_paths, depth - 1)
 
 
 def search_header_in(filepath: str, target_header: str, include_paths: List[str]) -> None:
@@ -76,6 +76,6 @@ def search_header_in(filepath: str, target_header: str, include_paths: List[str]
 
     # 递归搜索其他头文件中是否包含该头文件
     for start_header in headers:
-        dfs(start_header, target_header, f'PATH: {start_header}', include_paths, config.search_depth)
+        direct_search_dfs(start_header, target_header, f'PATH: {start_header}', include_paths, config.search_depth)
 
     tools.logger_core.info(f'统计：查找深度：{config.search_depth}，最大查找深度：{max_search_depth}')
