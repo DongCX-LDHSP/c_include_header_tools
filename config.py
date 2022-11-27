@@ -3,8 +3,11 @@ import sys
 from typing import List
 
 
-# 工程的根目录
+# 头文件工程的根目录
 BASE_DIR: str = os.path.realpath(os.path.abspath(os.path.dirname(__file__)))
+
+# C工程的根目录
+PROJECT_BASE_DIR: str = os.path.realpath(os.path.abspath(r'../..'))
 
 # 将工程根目录追加到系统环境变量中
 sys.path.append(BASE_DIR)
