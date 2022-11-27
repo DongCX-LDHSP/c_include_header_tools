@@ -47,6 +47,7 @@ def direct_search_dfs(start_header: str, target_header: str, path_to_header: str
         tools.logger_core.debug(f'{start_path} 中包含了头文件：\n'
                                 f'    {", ".join(headers)}')
         if target_header in headers:
+            # TODO 允许用户选择是否输出头文件相对 C 工程的路径
             tools.logger_core.info(f'{path_to_header} -> {target_header}')
 
         # 递归向深处查找

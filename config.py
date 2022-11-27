@@ -40,3 +40,5 @@ black_headers: set = {
     'stdio.h',
     'stdlib.h',
 }
+# 是否输出头文件相对工程根目录的路径
+output_relative_path: bool = False
