@@ -15,6 +15,15 @@ searched_headers: Set[str] = set()
 max_search_depth: int = 0
 
 
+def header_is_in_headers(header: str, headers: List[str]) -> bool:
+    """查找头文件 header 是否在 headers 中"""
+    for s_header in headers:
+        if os.path.basename(header) == os.path.basename(s_header):
+            return True
+
+    return False
+
+
 def direct_search_dfs(start_header: str, target_header: str, path_to_header: str, include_paths: List[str], depth: int) -> None:
     """
     在一个头文件中递归查找另一个头文件
@@ -46,7 +55,7 @@ def direct_search_dfs(start_header: str, target_header: str, path_to_header: str
         headers: List[str] = core.extract_header(tools.read_file_to_lines(start_path))
         tools.logger_core.debug(f'{start_path} 中包含了头文件：\n'
                                 f'    {", ".join(headers)}')
-        if target_header in headers:
+        if header_is_in_headers(target_header, headers):
             # TODO 允许用户选择是否输出头文件相对 C 工程的路径
             tools.logger_core.info(f'{path_to_header} -> {target_header}')
 
