@@ -37,3 +37,5 @@ logging.config.dictConfig(LOGGING)
 logger_core = logging.getLogger("CORE")
 # tools 使用
 logger_tool = logging.getLogger("TOOL")
+# func 使用
+logger_func = logging.getLogger("FUNC")
