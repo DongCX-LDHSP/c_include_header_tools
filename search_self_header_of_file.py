@@ -34,12 +34,11 @@ def search_self_header_of_file(filepath: str, include_paths: List[str]) -> None:
             if start_header == inner_target_header:
                 continue
             for header_file in header_files:
-                core.direct_search_dfs(
+                core.search_header_in(
                     header_file,
                     inner_target_header,
-                    f'PATH: {start_header}',
                     include_paths,
-                    config.search_depth
+                    include_self=True
                 )
 
         tools.logger_func.info(f'结束在头文件 {start_header} 中查找其他头文件')
@@ -54,4 +53,3 @@ if __name__ == '__main__':
         os.path.realpath(os.path.join(config.PROJECT_BASE_DIR, file_relative_path)),
         include_paths.include_paths
     )
-
