@@ -32,12 +32,14 @@ def search_self_header_of_file(filepath: str, include_paths: List[str]) -> None:
             continue
 
         tools.logger_func.info(f'在头文件 {start_header} 中查找其他头文件')
-        tools.logger_func.info(f'{start_header} 使用了路径：\n'
-                               f'    {header_files}')
+        tools.logger_func.debug(f'{start_header} 使用了路径：\n'
+                                f'    {header_files}')
 
         for inner_target_header in headers:
             if start_header == inner_target_header:
                 continue
+
+            tools.logger_func.debug(f'在头文件 {start_header} 中查找 {inner_target_header}')
             for header_file in header_files:
                 core.search_header_in(
                     header_file,
@@ -46,7 +48,7 @@ def search_self_header_of_file(filepath: str, include_paths: List[str]) -> None:
                     include_self=True
                 )
 
-        tools.logger_func.info(f'结束在头文件 {start_header} 中查找其他头文件')
+        tools.logger_func.info(f'在头文件 {start_header} 中查找其他头文件结束')
 
 
 if __name__ == '__main__':

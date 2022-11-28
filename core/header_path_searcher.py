@@ -17,11 +17,13 @@ def get_include_path_of(header: str, include_paths: List[str]) -> List[str]:
     """
     header_path: List[str] = []
     for path in include_paths:
-        if os.path.exists(os.path.join(path, header)) is False:
+        temp_path: str = os.path.realpath(os.path.abspath(os.path.join(path, header)))
+        logger_core.debug(f'尝试路径：{temp_path}')
+        if os.path.exists(temp_path) is False:
             continue
-        header_path.append(os.path.realpath(os.path.abspath(os.path.join(path, header))))
+        header_path.append(temp_path)
 
     if not header_path:
-        logger_core.warning(f'找不到头文件 {header} 所在的位置')
+        logger_core.debug(f'找不到头文件 {header} 所在的位置')
 
     return header_path

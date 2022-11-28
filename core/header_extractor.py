@@ -26,7 +26,7 @@ def extract_header_of_file(filepath: str) -> List[str]:
     """
     headers: List[str] = extract_header(tools.read_file_to_lines(filepath))
     if not headers:
-        tools.logger_core.warning(f'在文件 {os.path.relpath(filepath, config.PROJECT_BASE_DIR)} 中找不到任何头文件')
+        tools.logger_core.debug(f'在文件 {os.path.relpath(filepath, config.PROJECT_BASE_DIR)} 中找不到任何头文件')
 
     return headers
 

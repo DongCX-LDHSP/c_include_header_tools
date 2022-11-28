@@ -52,17 +52,23 @@ def dfs_header(start_header: str, target_header: str, pre_headers: List[str],
         return
 
     searched_headers.add(start_header)
-    tools.logger_core.debug(f'在头文件 {start_header} 中查找')
 
     # 更新最大查找深度
     global max_search_depth
     max_search_depth = max(max_search_depth, config.search_depth - depth + 1)
 
     header_paths: List[str] = core.get_include_path_of(start_header, include_paths)
+    if not header_paths:
+        return
+
+    tools.logger_core.debug(f'在头文件 {start_header} 中查找')
     tools.logger_core.debug(f'{start_header} 使用了路径：\n'
                             f'    {header_paths}')
     for start_path in header_paths:
         headers: List[str] = core.extract_header_of_file(start_path)
+        if not headers:
+            continue
+
         tools.logger_core.debug(f'{start_path} 中包含了头文件：\n'
                                 f'    {", ".join(headers)}')
         if header_is_in_headers(target_header, headers):
@@ -89,7 +95,7 @@ def search_header_in(filepath: str, target_header: str, include_paths: List[str]
     :param include_self: 路径中是否包含自己本身
     """
 
-    tools.logger_core.info(f'开始查找文件：{os.path.basename(filepath)}')
+    tools.logger_core.debug(f'开始查找文件：{os.path.basename(filepath)}')
 
     global max_search_depth
     max_search_depth = 0
@@ -109,5 +115,5 @@ def search_header_in(filepath: str, target_header: str, include_paths: List[str]
         dfs_header(start_header, target_header, pre_headers, include_paths, config.search_depth)
         pre_headers.pop()
 
-    tools.logger_core.info(f'结束查找文件：{os.path.basename(filepath)}')
-    tools.logger_core.info(f'统计：查找深度：{config.search_depth}，最大查找深度：{max_search_depth}')
+    tools.logger_core.debug(f'结束查找文件：{os.path.basename(filepath)}')
+    tools.logger_core.debug(f'统计：查找深度：{config.search_depth}，最大查找深度：{max_search_depth}\n')

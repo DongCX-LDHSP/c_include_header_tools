@@ -16,7 +16,7 @@ LOGGING = {
             'filename': config.log_file_path,
             'mode': config.log_file_open_mode,
             'encoding': 'utf8',
-            'level': config.log_level,
+            'level': 'DEBUG',
         },
     },
     'formatters': {
@@ -24,9 +24,19 @@ LOGGING = {
             'format': '[%(asctime)s][%(levelname)s][%(name)s] %(funcName)s@%(module)s:%(lineno)d\n%(message)s'
         }
     },
-    'root': {
-        'handlers': ['console', 'file', ],
-        'level': config.log_level,
+    'loggers': {
+        'CORE': {
+            'handlers': ['console','file'],
+            'level': 'DEBUG',
+        },
+        'TOOL': {
+            'handlers': ['console','file'],
+            'level': 'DEBUG',
+        },
+        'FUNC': {
+            'handlers': ['console','file'],
+            'level': 'DEBUG',
+        },
     }
 }
 
