@@ -83,7 +83,7 @@ def search_header_in(filepath: str, target_header: str, include_paths: List[str]
     max_search_depth = 0
 
     headers: List[str] = core.extract_header(tools.read_file_to_lines(filepath))
-    if target_header in headers:
+    if header_is_in_headers(target_header, headers):
         tools.logger_core.info(f'PATH: {target_header}')
 
     # 递归搜索其他头文件中是否包含该头文件
