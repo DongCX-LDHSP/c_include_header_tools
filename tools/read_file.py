@@ -20,7 +20,7 @@ def read_file_to_lines(filepath: str) -> List[str]:
     for encoding in config.support_encodings:
         try:
             with open(filepath, 'r', encoding=encoding) as file:
-                logger_tool.info(f'使用编码<{encoding}>成功打开文件')
+                logger_tool.debug(f'使用编码<{encoding}>成功打开文件')
                 return file.readlines()
         except UnicodeDecodeError:
             ...

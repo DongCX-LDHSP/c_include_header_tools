@@ -6,7 +6,6 @@ import sys
 from typing import List
 
 import core
-import tools
 import config
 import include_paths
 
@@ -18,9 +17,7 @@ def search_header_from_file(filepath: str, target_header: str, include_paths: Li
     :param target_header: 目标头文件
     :param include_paths: 头文件包含路径
     """
-    tools.logger_func.info(f'开始查找文件：{os.path.relpath(filepath, config.PROJECT_BASE_DIR)}')
     core.search_header_in(filepath, target_header, include_paths)
-    tools.logger_func.info(f'结束查找文件：{os.path.relpath(filepath, config.PROJECT_BASE_DIR)}')
 
 
 if __name__ == '__main__':

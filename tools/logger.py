@@ -21,7 +21,7 @@ LOGGING = {
     },
     'formatters': {
         'default': {
-            'format': '[%(asctime)s][%(levelname)s]<%(name)s> %(message)s'
+            'format': '[%(asctime)s][%(levelname)s][%(name)s] %(funcName)s@%(module)s:%(lineno)d\n%(message)s'
         }
     },
     'root': {

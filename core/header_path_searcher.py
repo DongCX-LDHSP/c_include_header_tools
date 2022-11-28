@@ -22,6 +22,6 @@ def get_include_path_of(header: str, include_paths: List[str]) -> List[str]:
         header_path.append(os.path.realpath(os.path.abspath(os.path.join(path, header))))
 
     if not header_path:
-        logger_core.warning(f'找不到头文件<{header}>所在的位置')
+        logger_core.warning(f'找不到头文件 {header} 所在的位置')
 
     return header_path

@@ -1,5 +1,9 @@
 from typing import List
 import re
+import os
+
+import tools
+import config
 
 """
 匹配多种形式的头文件，例如：
@@ -12,6 +16,19 @@ import re
 """
 header_pattern = r'^#include *["<](\w+([\\/]\w*)*\.[chpp]{1,3})[">]$'
 header_extractor = re.compile(header_pattern, re.M)
+
+
+def extract_header_of_file(filepath: str) -> List[str]:
+    """
+    提取一个文件中的所有头文件
+    :param filepath: 文件路径
+    :return: 多个头文件构成的列表
+    """
+    headers: List[str] = extract_header(tools.read_file_to_lines(filepath))
+    if not headers:
+        tools.logger_core.warning(f'在文件 {os.path.relpath(filepath, config.PROJECT_BASE_DIR)} 中找不到任何头文件')
+
+    return headers
 
 
 def extract_header(lines: List[str]) -> List[str]:
@@ -43,3 +60,4 @@ if __name__ == '__main__':
         r'  #include "bar.hpp"  ',
     ]
     print(extract_header(input_lines))
+    print(extract_header_of_file(__file__))

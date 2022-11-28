@@ -18,13 +18,18 @@ def search_self_header_of_file(filepath: str, include_paths: List[str]) -> None:
     :param filepath: 文件的绝对路径
     :param include_paths: 头文件包含路径
     """
-    tools.logger_func.info(f'开始查找文件：{os.path.relpath(filepath, config.PROJECT_BASE_DIR)}')
 
-    headers: List[str] = core.extract_header(tools.read_file_to_lines(filepath))
+    headers: List[str] = core.extract_header_of_file(filepath)
+    if not headers:
+        tools.logger_func.warning(f'该文件没有包含任何头文件，停止搜索')
+        return
+
     tools.logger_func.info(f'该文件包含了头文件：\n'
                            f'    {", ".join(headers)}')
     for start_header in headers:
         header_files: List[str] = core.get_include_path_of(start_header, include_paths)
+        if not header_files:
+            continue
 
         tools.logger_func.info(f'在头文件 {start_header} 中查找其他头文件')
         tools.logger_func.info(f'{start_header} 使用了路径：\n'
@@ -42,8 +47,6 @@ def search_self_header_of_file(filepath: str, include_paths: List[str]) -> None:
                 )
 
         tools.logger_func.info(f'结束在头文件 {start_header} 中查找其他头文件')
-
-    tools.logger_func.info(f'结束查找文件：{os.path.relpath(filepath, config.PROJECT_BASE_DIR)}')
 
 
 if __name__ == '__main__':
