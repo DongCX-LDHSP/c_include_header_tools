@@ -20,13 +20,26 @@ def header_is_in_headers(header: str, headers: Iterable[str]) -> bool:
     return any(os.path.basename(header) == os.path.basename(_) for _ in headers)
 
 
-def dfs_header(start_header: str, target_header: str, path_to_header: str,
+def format_header(header: str) -> str:
+    """基于配置控制头文件是否包含相对路径"""
+    return header if config.output_relative_path else os.path.basename(header)
+
+
+def format_path_to_header(pre_headers: List[str], header: str) -> str:
+    """基于配置控制构造到达目标头文件的路径"""
+    pre_headers.append(header)
+    result: str = f'PATH: {" -> ".join(pre_headers)}'
+    pre_headers.pop()
+    return result
+
+
+def dfs_header(start_header: str, target_header: str, pre_headers: List[str],
                include_paths: List[str], depth: int) -> None:
     """
     在一个头文件中递归查找另一个头文件
     :param start_header: 出发头文件
     :param target_header: 要查找的头文件
-    :param path_to_header: 到达目标头文件的路径
+    :param pre_headers: 到达目标头文件的前驱头文件
     :param include_paths: 头文件路径
     :param depth: 查找深度
     """
@@ -53,15 +66,16 @@ def dfs_header(start_header: str, target_header: str, path_to_header: str,
         tools.logger_core.debug(f'{start_path} 中包含了头文件：\n'
                                 f'    {", ".join(headers)}')
         if header_is_in_headers(target_header, headers):
-            # TODO 允许用户选择是否输出头文件相对 C 工程的路径
-            tools.logger_core.info(f'{path_to_header} -> {target_header}')
+            tools.logger_core.info(format_path_to_header(pre_headers, target_header))
 
         # 递归向深处查找
         for header in headers:
             # 跳过已查找过的头文件
             if header_is_in_headers(header, searched_headers):
                 continue
-            dfs_header(header, target_header, f'{path_to_header} -> {header}', include_paths, depth - 1)
+            pre_headers.append(format_header(header))
+            dfs_header(header, target_header, pre_headers, include_paths, depth - 1)
+            pre_headers.pop()
 
 
 def search_header_in(filepath: str, target_header: str, include_paths: List[str], include_self: bool = False) -> None:
@@ -78,18 +92,19 @@ def search_header_in(filepath: str, target_header: str, include_paths: List[str]
     global max_search_depth
     max_search_depth = 0
 
+    # 前驱头文件
+    pre_headers: List[str] = []
+    if include_self is True:
+        pre_headers.append(os.path.basename(filepath))
+
     headers: List[str] = core.extract_header(tools.read_file_to_lines(filepath))
     if header_is_in_headers(target_header, headers):
-        tools.logger_core.info(f'PATH: {target_header}')
+        tools.logger_core.info(format_path_to_header(pre_headers, target_header))
 
     # 递归搜索其他头文件中是否包含该头文件
     for start_header in headers:
-        dfs_header(
-            start_header,
-            target_header,
-            f'PATH: {(os.path.basename(filepath) + " -> ") if include_self else ""}{start_header}',
-            include_paths,
-            config.search_depth
-        )
+        pre_headers.append(format_header(start_header))
+        dfs_header(start_header, target_header, pre_headers, include_paths, config.search_depth)
+        pre_headers.pop()
 
     tools.logger_core.info(f'统计：查找深度：{config.search_depth}，最大查找深度：{max_search_depth}')
