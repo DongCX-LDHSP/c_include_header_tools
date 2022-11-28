@@ -3,7 +3,7 @@
 """
 
 import os
-from typing import List, Set
+from typing import List, Set, Iterable
 
 import core
 import tools
@@ -15,13 +15,9 @@ searched_headers: Set[str] = set()
 max_search_depth: int = 0
 
 
-def header_is_in_headers(header: str, headers: List[str]) -> bool:
+def header_is_in_headers(header: str, headers: Iterable[str]) -> bool:
     """查找头文件 header 是否在 headers 中"""
-    for s_header in headers:
-        if os.path.basename(header) == os.path.basename(s_header):
-            return True
-
-    return False
+    return any(os.path.basename(header) == os.path.basename(_) for _ in headers)
 
 
 def dfs_header(start_header: str, target_header: str, path_to_header: str,
@@ -39,7 +35,7 @@ def dfs_header(start_header: str, target_header: str, path_to_header: str,
     if depth == 0:
         return
     # 检查头文件是否被屏蔽
-    if start_header in config.black_headers:
+    if header_is_in_headers(start_header, config.black_headers):
         return
 
     searched_headers.add(start_header)
@@ -63,7 +59,7 @@ def dfs_header(start_header: str, target_header: str, path_to_header: str,
         # 递归向深处查找
         for header in headers:
             # 跳过已查找过的头文件
-            if header in searched_headers:
+            if header_is_in_headers(header, searched_headers):
                 continue
             dfs_header(header, target_header, f'{path_to_header} -> {header}', include_paths, depth - 1)
 
