@@ -8,7 +8,7 @@ LOGGING = {
     'handlers': {
         'console': {
             'class': 'logging.StreamHandler',  # 默认输出到 stderr
-            'formatter': 'default',
+            'formatter': 'console',
             'level': config.log_level,
         },
         'file': {
@@ -21,7 +21,10 @@ LOGGING = {
     },
     'formatters': {
         'default': {
-            'format': '[%(asctime)s][%(levelname)s][%(name)s] %(funcName)s@%(module)s:%(lineno)d\n%(message)s'
+            'format': '[%(asctime)s][%(levelname)s][%(name)s] %(funcName)s@%(module)s:%(lineno)d\n%(message)s',
+        },
+        'console': {
+            'format': '[%(name)s] %(message)s',
         }
     },
     'loggers': {
